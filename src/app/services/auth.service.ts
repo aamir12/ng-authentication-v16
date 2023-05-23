@@ -6,14 +6,14 @@ import { AuthResponse, UserData } from '../core/model/auth';
 import jwtDecode from 'jwt-decode';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  //url = 'https://api.developbetterapps.com/api/';
-  url = 'http://localhost:3001/api/v1'  ;
+  url = environment.API_URL  ;
   TOKEN_KEY = 'token';
   user = new BehaviorSubject<UserData | null>(null);
 
@@ -34,8 +34,8 @@ export class AuthService {
 
   }
 
-  register(email:string,password:string,name:string){
-    return this.http.post<ResponseHelper<AuthResponse>>(this.url+'/auth/register',{email,password,name,role:'user'})
+  register(email:string,password:string,name:string,role:string){
+    return this.http.post<ResponseHelper<AuthResponse>>(this.url+'/auth/register',{email,password,name,role})
     .pipe(
       map((res) => {
         console.log(res);

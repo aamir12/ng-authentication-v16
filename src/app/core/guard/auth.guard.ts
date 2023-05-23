@@ -5,17 +5,22 @@ import { filter, map } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
+  console.log(route.data);
   const authService = inject(AuthService);
   const router = inject(Router);
   return authService.getUserInfo().pipe(
     map((userData) => {
       if(userData) {
-        return true
+        const {roles}  = route.data;
+        if(roles.length === 0 || roles.includes(userData.role)) {
+          return true
+        }
+        
+        return false;
       }else {
         return router.createUrlTree(['/']);
       }
     })
-    
   )
   
 };

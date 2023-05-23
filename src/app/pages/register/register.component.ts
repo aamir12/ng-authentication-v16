@@ -15,7 +15,8 @@ export class RegisterComponent {
   form = this.fb.nonNullable.group({
     name: ['',[Validators.required]],
     email: ['',[Validators.required,Validators.email]],
-    password: ['',[Validators.required,Validators.minLength(6)]]
+    password: ['',[Validators.required,Validators.minLength(6)]],
+    isPublisher: [false],
   })
 
   error = ''
@@ -27,7 +28,8 @@ export class RegisterComponent {
   onSubmit() {
     this.error = '';
     const {email,password,name } = this.form.getRawValue();
-    this.authService.register(email,password,name).subscribe({
+    const role = this.form.get('isPublisher')?.value ? 'publisher':'user';
+    this.authService.register(email,password,name,role).subscribe({
       next : (res)=> {
         this.router.navigate(['/dashboard'])
       },
